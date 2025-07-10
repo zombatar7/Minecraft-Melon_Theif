@@ -1,0 +1,21 @@
+{
+  "auctionConfig": {
+    "duration": 24,
+    "minimumBid": 10,
+    "bidIncrement": 5,
+    "buyoutBid": null,
+    "numberOfLots": 1,
+    "lots": []
+  },
+  "auctionState": {
+    "activeLots": [],
+    "timestamp": 0,
+    "lastUpdate": ""
+  },
+  "auctionStarted": false,
+  "auctionStartTime": "",
+  "auctionHistory": [],
+  "repeatAuctions": {},
+  "auctionRequests": [],
+  "lastModified": ""
+}
