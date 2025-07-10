@@ -1,0 +1,24 @@
+{
+  "mellonsoConfig": {
+    "stats": {
+      "heritageYears": 0,
+      "masterCraftsmen": 1,
+      "exclusivePieces": 3,
+      "globalPresence": 1,
+      "satisfiedCustomers": 0,
+      "farmsBuilt": 0
+    },
+    "melonCounter": {
+      "current": 0,
+      "maxType": "none",
+      "maxValue": null
+    },
+    "masterpieces": {},
+    "statsBackgrounds": {},
+    "farms": [],
+    "particleImage": null,
+    "textColors": {}
+  },
+  "contactRequests": [],
+  "lastModified": ""
+}
