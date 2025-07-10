@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Farm Designs - MELLONSO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 20px 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 100;
+            color: #d4af37;
+            text-decoration: none;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 40px;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 300;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .nav-links a:hover {
+            color: #d4af37;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(0,0,0,0.3)),
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23111111;stop-opacity:1" /><stop offset="100%" style="stop-color:%23000000;stop-opacity:1" /></linearGradient></defs><rect width="1200" height="800" fill="url(%23grad1)"/></svg>');
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 0 20px;
+            z-index: 2;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 100;
+            margin-bottom: 30px;
+            color: #d4af37;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            font-weight: 300;
+            opacity: 0.9;
+            letter-spacing: 2px;
+        }
+
+        /* Farms Section */
+        .farms {
+            padding: 120px 0;
+            background: #000;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            font-weight: 100;
+            text-align: center;
+            margin-bottom: 80px;
+            color: #d4af37;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .farms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 60px;
+            margin-bottom: 80px;
+        }
+
+        .farm-card {
+            background: linear-gradient(135deg, #1a1a1a, #111111);
+            border: 2px solid #333;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            position: relative;
+            min-height: 400px;
+        }
+
+        .farm-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.2);
+            border-color: #d4af37;
+        }
+
+        .farm-image {
+            height: 250px;
+            background: #2a2a2a;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .farm-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(212, 175, 55, 0.1), transparent);
+            opacity: 0.5;
+        }
+
+        .farm-placeholder {
+            color: #888;
+            font-size: 1.1rem;
+            text-align: center;
+            z-index: 2;
+            position: relative;
+        }
+
+        .farm-content {
+            padding: 30px;
+        }
+
+        .farm-title {
+            font-size: 1.8rem;
+            font-weight: 300;
+            color: #d4af37;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .farm-description {
+            font-size: 1rem;
+            opacity: 0.8;
+            line-height: 1.6;
+            letter-spacing: 1px;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: linear-gradient(135deg, #1a1a1a, #111111);
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, #32CD32, #228B22);
+            color: #fff;
+            border: none;
+            padding: 20px 40px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 5px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            margin: 20px;
+        }
+
+        .cta-button:hover {
+            background: linear-gradient(45deg, #228B22, #32CD32);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(50, 205, 50, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            background: #000;
+            padding: 60px 0;
+            text-align: center;
+            border-top: 1px solid #333;
+        }
+
+        .disclaimer {
+            margin-bottom: 40px;
+        }
+
+        .search-container {
+            margin-bottom: 40px;
+        }
+
+        .copyright {
+            border-top: 1px solid #333;
+            padding-top: 40px;
+            opacity: 0.5;
+            font-weight: 300;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+                letter-spacing: 3px;
+            }
+
+            .hero-content p {
+                font-size: 1rem;
+            }
+
+            .farms-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* Fade in animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">MELLONSO</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#farms">Farm Designs</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Premium Farm Designs</h1>
+            <p>Architectural Excellence • Precision Engineering • Luxury Cultivation</p>
+        </div>
+    </section>
+
+    <section class="farms" id="farms">
+        <div class="container">
+            <h2 class="section-title fade-in">Signature Collections</h2>
+            <div class="farms-grid" id="farmsGrid">
+                <!-- Farms will be dynamically generated here -->
+            </div>
+        </div>
+    </section>
+
+    <section class="contact-section" id="contact">
+        <div class="container">
+            <h2 class="section-title fade-in">Ready to Transform Your Farm?</h2>
+            <p class="fade-in" style="font-size: 1.2rem; margin-bottom: 40px; opacity: 0.8;">Experience the pinnacle of agricultural luxury with our bespoke farm designs.</p>
+            <button class="cta-button fade-in" onclick="openContactForm()">📞 Contact Sales Team</button>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <!-- Disclaimer -->
+            <div class="disclaimer fade-in">
+                <p style="color: #888; font-size: 0.9rem; font-style: italic;">This is a joke website and is not meant to be taken seriously.</p>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="search-container fade-in">
+                <input type="text" id="searchInput" placeholder="Search..." style="
+                    background: rgba(26, 26, 26, 0.8);
+                    border: 2px solid #333;
+                    color: #fff;
+                    padding: 15px 20px;
+                    font-size: 1rem;
+                    width: 300px;
+                    max-width: 90%;
+                    text-align: center;
+                    letter-spacing: 1px;
+                    transition: all 0.3s ease;
+                " onfocus="this.style.borderColor='#d4af37'" onblur="this.style.borderColor='#333'">
+            </div>
+            
+            <div class="copyright">
+                <p>MELLONSO - Premium Minecraft Solutions</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Contact form functionality
+        function openContactForm() {
+            const username = prompt('Enter your Minecraft username to request a consultation:');
+            if (username && username.trim()) {
+                const message = prompt('How can we help you today?\n\n• Premium Farm Design Consultation\n• Request Access to Exclusive Auctions\n• Professional Auctioneer Services\n• Custom Redstone Automation\n• Architectural Farm Planning\n\nPlease describe your needs:');
+                if (message && message.trim()) {
+                    // Check if this is an auction-related request
+                    const isAuctionRequest = message.toLowerCase().includes('auction') ||
+                                           message.toLowerCase().includes('auctioneer') ||
+                                           message.toLowerCase().includes('bid') ||
+                                           message.toLowerCase().includes('sell');
+
+                    if (isAuctionRequest) {
+                        // Save to auction admin panel
+                        const auctionRequests = JSON.parse(localStorage.getItem('auctionRequests') || '[]');
+                        auctionRequests.unshift({
+                            username: username.trim(),
+                            message: message.trim(),
+                            timestamp: new Date().toISOString(),
+                            source: 'farms-page',
+                            type: 'auction-service'
+                        });
+                        localStorage.setItem('auctionRequests', JSON.stringify(auctionRequests));
+
+                        alert(`🎉 Thank you ${username.trim()}!\n\nYour auction service request has been submitted to our auction specialists. You will be contacted in-game within 24 hours.\n\nGet ready for premium auction services!`);
+                    } else {
+                        // Save to MELLONSO admin panel
+                        const contactRequests = JSON.parse(localStorage.getItem('contactRequests') || '[]');
+                        contactRequests.unshift({
+                            username: username.trim(),
+                            message: message.trim(),
+                            timestamp: new Date().toISOString(),
+                            source: 'farms-page',
+                            type: 'farm-consultation'
+                        });
+                        localStorage.setItem('contactRequests', JSON.stringify(contactRequests));
+
+                        alert(`🎉 Thank you ${username.trim()}!\n\nYour consultation request has been submitted. Our master farm architect will contact you in-game within 24 hours.\n\nPrepare to experience luxury melon farming like never before!`);
+                    }
+                }
+            }
+        }
+
+        // Search functionality
+        function handleSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const searchValue = searchInput.value.toLowerCase().trim();
+
+            if (searchValue === 'supersecreatpassword') {
+                window.location.href = 'secret.html';
+            } else if (searchValue === 'supersecretpassword1') {
+                window.location.href = 'admin.html';
+            } else if (searchValue === 'themelontheif') {
+                window.location.href = 'mellonso-admin.html';
+            } else if (searchValue.length > 0) {
+                // Show error for any non-empty, non-password input
+                showSearchError();
+                searchInput.value = ''; // Clear the input
+            }
+        }
+
+        // Show search error message
+        function showSearchError() {
+            // Create error modal
+            const errorModal = document.createElement('div');
+            errorModal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.9);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            `;
+
+            const errorContent = document.createElement('div');
+            errorContent.style.cssText = `
+                background: linear-gradient(135deg, #1a1a1a, #111111);
+                border: 2px solid #d4af37;
+                border-radius: 10px;
+                padding: 40px;
+                text-align: center;
+                max-width: 500px;
+                margin: 20px;
+                transform: scale(0.8);
+                transition: transform 0.3s ease;
+            `;
+
+            errorContent.innerHTML = `
+                <div style="color: #ffd700; font-size: 3rem; margin-bottom: 20px;">🔍</div>
+                <h3 style="color: #d4af37; margin-bottom: 20px; font-size: 1.5rem;">SEARCH FUNCTIONALITY</h3>
+                <p style="color: #fff; margin-bottom: 30px; line-height: 1.6;">
+                    <strong>Search functionality coming soon!</strong><br>
+                    We're working on bringing you the finest search experience.<br>
+                    <span style="color: #888; font-size: 0.9rem;">Stay tuned for updates</span>
+                </p>
+                <button onclick="this.closest('[style*=\"position: fixed\"]').remove()" style="
+                    background: linear-gradient(45deg, #d4af37, #ffd700);
+                    color: #000;
+                    border: none;
+                    padding: 12px 30px;
+                    border-radius: 6px;
+                    font-weight: bold;
+                    cursor: pointer;
+                    transition: transform 0.2s ease;
+                " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    UNDERSTOOD
+                </button>
+            `;
+
+            errorModal.appendChild(errorContent);
+            document.body.appendChild(errorModal);
+
+            // Animate in
+            setTimeout(() => {
+                errorModal.style.opacity = '1';
+                errorContent.style.transform = 'scale(1)';
+            }, 10);
+
+            // Auto-close after 5 seconds
+            setTimeout(() => {
+                if (errorModal.parentNode) {
+                    errorModal.style.opacity = '0';
+                    setTimeout(() => errorModal.remove(), 300);
+                }
+            }, 5000);
+        }
+
+        // Load farm configurations from admin
+        function loadFarmConfigurations() {
+            const mellonsoConfig = JSON.parse(localStorage.getItem('mellonsoConfig') || '{}');
+            const farmsGrid = document.getElementById('farmsGrid');
+
+            if (mellonsoConfig.farms && Array.isArray(mellonsoConfig.farms)) {
+                farmsGrid.innerHTML = '';
+
+                mellonsoConfig.farms.forEach(farm => {
+                    const farmHTML = `
+                        <div class="farm-card fade-in" id="farm${farm.id}">
+                            <div class="farm-image" id="farm${farm.id}Image" style="background-image: url('${farm.backgroundImage}');">
+                                ${!farm.backgroundImage ? `<div class="farm-placeholder">🏗️ ${farm.title}</div>` : ''}
+                            </div>
+                            <div class="farm-content">
+                                <h3 class="farm-title">${farm.title}</h3>
+                                <p class="farm-description">${farm.description}</p>
+                            </div>
+                        </div>
+                    `;
+                    farmsGrid.innerHTML += farmHTML;
+                });
+            } else {
+                // Fallback for old format or no config
+                farmsGrid.innerHTML = `
+                    <div class="farm-card fade-in">
+                        <div class="farm-image">
+                            <div class="farm-placeholder">🏗️ Premium Farm Design 1</div>
+                        </div>
+                        <div class="farm-content">
+                            <h3 class="farm-title">Premium Farm Design 1</h3>
+                            <p class="farm-description">Luxury melon cultivation at its finest.</p>
+                        </div>
+                    </div>
+                    <div class="farm-card fade-in">
+                        <div class="farm-image">
+                            <div class="farm-placeholder">🏗️ Premium Farm Design 2</div>
+                        </div>
+                        <div class="farm-content">
+                            <h3 class="farm-title">Premium Farm Design 2</h3>
+                            <p class="farm-description">Architectural excellence meets agricultural mastery.</p>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Enhanced scroll animations
+        function checkScroll() {
+            const elements = document.querySelectorAll('.fade-in');
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('visible');
+                }
+            });
+        }
+
+        // Add search event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        handleSearch();
+                    }
+                });
+
+                searchInput.addEventListener('input', function() {
+                    handleSearch();
+                });
+            }
+        });
+
+        // Event listeners
+        window.addEventListener('scroll', checkScroll);
+        window.addEventListener('load', checkScroll);
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('MELLONSO Farms - Initialized');
+            loadFarmConfigurations();
+            checkScroll();
+            
+            // Add loading animation
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 0.5s ease';
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+</body>
+</html>

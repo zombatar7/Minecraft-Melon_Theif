@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auction Admin Panel - Funtimes SMP Auction House</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #1a1a1a;
+            color: #fff;
+            min-height: 100vh;
+            background-image: 
+                linear-gradient(45deg, #2a2a2a 25%, transparent 25%),
+                linear-gradient(-45deg, #2a2a2a 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #2a2a2a 75%),
+                linear-gradient(-45deg, transparent 75%, #2a2a2a 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        }
+
+        .header {
+            background: #0d1117;
+            padding: 20px 0;
+            border-bottom: 3px solid #FF4444;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .header h1 {
+            color: #FF4444;
+            font-size: 2.2rem;
+            text-shadow: 2px 2px 4px #000;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #CCCCCC;
+            font-size: 1rem;
+        }
+
+        .back-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            color: #FFD700;
+            text-decoration: none;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            z-index: 1000;
+        }
+
+        .back-link:hover {
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .admin-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .config-section {
+            background: #2a2a2a;
+            border: 2px solid #FF4444;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+        }
+
+        .section-title {
+            color: #FF4444;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #CCCCCC;
+            margin-bottom: 8px;
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            background: #1a1a1a;
+            border: 2px solid #555;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 1rem;
+            font-family: 'Courier New', monospace;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #FF4444;
+            box-shadow: 0 0 8px rgba(255, 68, 68, 0.3);
+        }
+
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-upload input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-upload-label {
+            display: block;
+            padding: 12px;
+            background: #1a1a1a;
+            border: 2px dashed #555;
+            border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #CCCCCC;
+        }
+
+        .file-upload-label:hover {
+            border-color: #FF4444;
+            background: #2a2a2a;
+        }
+
+        .file-upload-label.has-file {
+            border-color: #32CD32;
+            color: #32CD32;
+        }
+
+        .lot-preview {
+            background: #1a1a1a;
+            border: 2px solid #555;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 10px;
+            text-align: center;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lot-preview img {
+            max-width: 100%;
+            max-height: 100px;
+            border-radius: 4px;
+        }
+
+        .lot-preview p {
+            color: #888;
+            font-style: italic;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            font-family: 'Courier New', monospace;
+        }
+
+        .btn-save {
+            background: linear-gradient(45deg, #32CD32, #228B22);
+            color: #fff;
+        }
+
+        .btn-save:hover {
+            background: linear-gradient(45deg, #228B22, #32CD32);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(50, 205, 50, 0.4);
+        }
+
+        .btn-preview {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: #000;
+        }
+
+        .btn-preview:hover {
+            background: linear-gradient(45deg, #FFA500, #FFD700);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+        }
+
+        .btn-reset {
+            background: linear-gradient(45deg, #FF4444, #CC0000);
+            color: #fff;
+        }
+
+        .btn-reset:hover {
+            background: linear-gradient(45deg, #CC0000, #FF4444);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 68, 68, 0.4);
+        }
+
+        .status-message {
+            background: #2a2a2a;
+            border: 2px solid #32CD32;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: center;
+            color: #32CD32;
+            display: none;
+        }
+
+        .status-message.error {
+            border-color: #FF4444;
+            color: #FF4444;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-link">← Back to MELLONSO</a>
+    
+    <div class="header">
+        <h1>🔧 Funtimes SMP Admin Panel</h1>
+        <p>Configure Auction Settings • Upload Lot Images • Manage Bidding</p>
+    </div>
+
+    <div class="container">
+        <div class="admin-grid" id="lotContainer">
+            <div class="config-section">
+                <h3 class="section-title">🖼️ Lot 1 Configuration</h3>
+
+                <div class="form-group">
+                    <label for="duration">⏰ Auction Duration:</label>
+                    <div style="display: flex; gap: 15px; align-items: center;">
+                        <input type="number" id="duration" min="1" value="24" placeholder="Duration" style="flex: 1; padding: 20px; font-size: 1.2rem; min-width: 120px;">
+                        <select id="durationUnit" style="padding: 20px; background: #1a1a1a; border: 2px solid #555; border-radius: 6px; color: #fff; font-size: 1.1rem; min-width: 120px;">
+                            <option value="minutes">Minutes</option>
+                            <option value="hours" selected>Hours</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="minimumBid">💎 Minimum Starting Bid (diamonds):</label>
+                    <input type="number" id="minimumBid" min="1" value="10" placeholder="Enter minimum bid">
+                </div>
+
+                <div class="form-group">
+                    <label for="bidIncrement">📈 Bid Increment (diamonds):</label>
+                    <input type="number" id="bidIncrement" min="1" value="5" placeholder="Enter bid increment">
+                </div>
+
+                <div class="form-group">
+                    <label for="buyoutBid">🏆 Buyout Price (diamonds):</label>
+                    <input type="number" id="buyoutBid" min="1" placeholder="Enter buyout price (optional)">
+                </div>
+
+                <div class="form-group">
+                    <label for="lotTitle">📝 Lot Title:</label>
+                    <input type="text" id="lotTitle" placeholder="Enter lot title" value="Mystery Item">
+                </div>
+
+                <div class="form-group">
+                    <label for="lotDescription">📄 Lot Description:</label>
+                    <input type="text" id="lotDescription" placeholder="Enter lot description">
+                </div>
+
+                <div class="form-group">
+                    <label for="redeemCode">🎫 Redeem Code (for winner):</label>
+                    <input type="text" id="redeemCode" placeholder="Auto-generated if empty" value="">
+                </div>
+
+                <div class="form-group">
+                    <label for="repeatInterval">🔄 Repeat if no bids:</label>
+                    <div style="display: flex; gap: 15px; align-items: center;">
+                        <input type="number" id="repeatInterval" min="0" value="0" placeholder="0 = no repeat" style="flex: 1; padding: 20px; font-size: 1.2rem; min-width: 120px;">
+                        <select id="repeatUnit" style="padding: 20px; background: #1a1a1a; border: 2px solid #555; border-radius: 6px; color: #fff; font-size: 1.1rem; min-width: 120px;">
+                            <option value="minutes">Minutes</option>
+                            <option value="hours" selected>Hours</option>
+                        </select>
+                    </div>
+                    <small style="color: #888; font-size: 0.8rem; display: block; margin-top: 5px;">
+                        Set to 0 to disable repeating. If no bids are placed, auction will restart after this time.
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="lotImage">🖼️ Upload Lot Image:</label>
+                    <div class="file-upload">
+                        <input type="file" id="lotImage" accept="image/*">
+                        <label for="lotImage" class="file-upload-label" id="fileLabel">
+                            📁 Click to upload image or drag & drop
+                        </label>
+                    </div>
+                </div>
+
+                <div class="lot-preview" id="imagePreview">
+                    <p>No image selected</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn btn-save" onclick="saveConfiguration()">💾 Save Configuration</button>
+            <button class="btn btn-save" onclick="addNewLot()" style="background: linear-gradient(45deg, #FFD700, #FFA500); color: #000;">➕ Add Another Lot</button>
+            <button class="btn btn-save" onclick="startAuctions()" style="background: linear-gradient(45deg, #32CD32, #228B22); color: #fff;">🚀 Start Auctions</button>
+            <button class="btn btn-preview" onclick="previewAuction()">👁️ Preview Auction</button>
+            <button class="btn btn-reset" onclick="resetConfiguration()">🔄 Reset to Defaults</button>
+        </div>
+
+        <div class="action-buttons" style="margin-top: 20px; border-top: 2px solid #ff4444; padding-top: 20px;">
+            <h3 style="color: #ff4444; text-align: center; margin-bottom: 15px;">⚠️ Emergency Controls</h3>
+            <button class="btn btn-reset" onclick="stopAllAuctions()" style="background: linear-gradient(45deg, #ff4444, #cc0000); color: #fff; width: 100%; font-size: 1.1rem; padding: 15px;">
+                🛑 STOP ALL AUCTIONS & RESET AUCTION HOUSE
+            </button>
+            <p style="color: #888; text-align: center; margin-top: 10px; font-size: 0.9rem;">
+                This will immediately stop all active auctions, clear all bids, and reset the auction house to empty state.
+            </p>
+        </div>
+
+        <!-- Auction Requests -->
+        <div class="config-section" style="margin-top: 30px;">
+            <h3 class="section-title">📞 Auction Service Requests</h3>
+            <div id="auctionRequests">
+                <p style="color: #888; text-align: center; padding: 20px;">No auction requests yet</p>
+            </div>
+            <button class="btn btn-reset" onclick="clearAuctionRequests()" style="margin-top: 15px; width: 100%;">🗑️ Clear All Requests</button>
+        </div>
+
+        <div class="config-section" style="margin-top: 30px;">
+            <h3 class="section-title">📊 Auction History</h3>
+            <div id="auctionHistory">
+                <p style="color: #888; text-align: center; padding: 20px;">No completed auctions yet</p>
+            </div>
+            <button class="btn btn-reset" onclick="clearHistory()" style="margin-top: 15px; width: 100%;">🗑️ Clear History</button>
+        </div>
+
+        <div class="status-message" id="statusMessage"></div>
+    </div>
+
+    <script>
+        // Configuration object to store all settings
+        let auctionConfig = {
+            duration: 24,
+            minimumBid: 10,
+            bidIncrement: 5,
+            buyoutBid: null,
+            numberOfLots: 1,
+            lots: [
+                {
+                    title: "Mystery Item",
+                    description: "",
+                    image: null,
+                    imageData: null
+                }
+            ]
+        };
+
+        let lotCounter = 1;
+
+        // Load existing configuration from localStorage
+        function loadConfiguration() {
+            const saved = localStorage.getItem('auctionConfig');
+            if (saved) {
+                auctionConfig = JSON.parse(saved);
+                updateFormFields();
+            }
+        }
+
+        // Update form fields with loaded configuration
+        function updateFormFields() {
+            if (auctionConfig.lots[0]) {
+                // Handle duration with units
+                const lot = auctionConfig.lots[0];
+                if (lot.durationDisplay !== undefined && lot.durationUnit) {
+                    document.getElementById('duration').value = lot.durationDisplay;
+                    document.getElementById('durationUnit').value = lot.durationUnit;
+                } else {
+                    // Legacy support - assume hours
+                    document.getElementById('duration').value = lot.duration || 24;
+                    document.getElementById('durationUnit').value = 'hours';
+                }
+
+                document.getElementById('minimumBid').value = lot.minimumBid || 10;
+                document.getElementById('bidIncrement').value = lot.bidIncrement || 5;
+                document.getElementById('buyoutBid').value = lot.buyoutBid || '';
+                document.getElementById('lotTitle').value = lot.title || 'Mystery Item';
+                document.getElementById('lotDescription').value = lot.description || '';
+                document.getElementById('redeemCode').value = lot.redeemCode || '';
+
+                // Handle repeat interval with units
+                if (lot.repeatDisplay !== undefined && lot.repeatUnit) {
+                    document.getElementById('repeatInterval').value = lot.repeatDisplay;
+                    document.getElementById('repeatUnit').value = lot.repeatUnit;
+                } else {
+                    // Legacy support - assume hours
+                    document.getElementById('repeatInterval').value = lot.repeatInterval || 0;
+                    document.getElementById('repeatUnit').value = 'hours';
+                }
+
+                if (lot.imageData) {
+                    showImagePreview(lot.imageData, 'imagePreview');
+                    document.getElementById('fileLabel').textContent = '✅ Image loaded from saved config';
+                    document.getElementById('fileLabel').classList.add('has-file');
+                }
+            }
+        }
+
+        // Handle file upload
+        function setupFileUpload() {
+            const lotImageInput = document.getElementById('lotImage');
+            if (lotImageInput) {
+                lotImageInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const imageData = e.target.result;
+                            showImagePreview(imageData);
+                            auctionConfig.lots[0].imageData = imageData;
+
+                            document.getElementById('fileLabel').textContent = `✅ ${file.name}`;
+                            document.getElementById('fileLabel').classList.add('has-file');
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+        }
+
+        // Show image preview
+        function showImagePreview(imageData, previewId) {
+            const preview = document.getElementById(previewId);
+            preview.innerHTML = `<img src="${imageData}" alt="Lot preview">`;
+        }
+
+        // Add new lot configuration
+        function addNewLot() {
+            lotCounter++;
+            const container = document.getElementById('lotContainer');
+
+            const newLotHTML = `
+                <div class="config-section">
+                    <h3 class="section-title">🖼️ Lot ${lotCounter} Configuration</h3>
+
+                    <div class="form-group">
+                        <label for="duration${lotCounter}">⏰ Auction Duration:</label>
+                        <div style="display: flex; gap: 15px; align-items: center;">
+                            <input type="number" id="duration${lotCounter}" min="1" value="24" placeholder="Duration" style="flex: 1; padding: 20px; font-size: 1.2rem; min-width: 120px;">
+                            <select id="durationUnit${lotCounter}" style="padding: 20px; background: #1a1a1a; border: 2px solid #555; border-radius: 6px; color: #fff; font-size: 1.1rem; min-width: 120px;">
+                                <option value="minutes">Minutes</option>
+                                <option value="hours" selected>Hours</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="minimumBid${lotCounter}">💎 Minimum Starting Bid (diamonds):</label>
+                        <input type="number" id="minimumBid${lotCounter}" min="1" value="10" placeholder="Enter minimum bid">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bidIncrement${lotCounter}">📈 Bid Increment (diamonds):</label>
+                        <input type="number" id="bidIncrement${lotCounter}" min="1" value="5" placeholder="Enter bid increment">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="buyoutBid${lotCounter}">🏆 Buyout Price (diamonds):</label>
+                        <input type="number" id="buyoutBid${lotCounter}" min="1" placeholder="Enter buyout price (optional)">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lotTitle${lotCounter}">📝 Lot Title:</label>
+                        <input type="text" id="lotTitle${lotCounter}" placeholder="Enter lot title" value="Mystery Item ${lotCounter}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lotDescription${lotCounter}">📄 Lot Description:</label>
+                        <input type="text" id="lotDescription${lotCounter}" placeholder="Enter lot description">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="redeemCode${lotCounter}">🎫 Redeem Code (for winner):</label>
+                        <input type="text" id="redeemCode${lotCounter}" placeholder="Auto-generated if empty" value="">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="repeatInterval${lotCounter}">🔄 Repeat if no bids:</label>
+                        <div style="display: flex; gap: 15px; align-items: center;">
+                            <input type="number" id="repeatInterval${lotCounter}" min="0" value="0" placeholder="0 = no repeat" style="flex: 1; padding: 20px; font-size: 1.2rem; min-width: 120px;">
+                            <select id="repeatUnit${lotCounter}" style="padding: 20px; background: #1a1a1a; border: 2px solid #555; border-radius: 6px; color: #fff; font-size: 1.1rem; min-width: 120px;">
+                                <option value="minutes">Minutes</option>
+                                <option value="hours" selected>Hours</option>
+                            </select>
+                        </div>
+                        <small style="color: #888; font-size: 0.8rem; display: block; margin-top: 5px;">
+                            Set to 0 to disable repeating. If no bids are placed, auction will restart after this time.
+                        </small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lotImage${lotCounter}">🖼️ Upload Lot Image:</label>
+                        <div class="file-upload">
+                            <input type="file" id="lotImage${lotCounter}" accept="image/*">
+                            <label for="lotImage${lotCounter}" class="file-upload-label" id="fileLabel${lotCounter}">
+                                📁 Click to upload image or drag & drop
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="lot-preview" id="imagePreview${lotCounter}">
+                        <p>No image selected</p>
+                    </div>
+
+                    <button class="btn btn-reset" onclick="removeLot(${lotCounter})" style="margin-top: 15px; width: 100%;">🗑️ Remove This Lot</button>
+                </div>
+            `;
+
+            container.insertAdjacentHTML('beforeend', newLotHTML);
+
+            // Add event listener for new file input
+            document.getElementById(`lotImage${lotCounter}`).addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const imageData = e.target.result;
+                        showImagePreview(imageData, `imagePreview${lotCounter}`);
+
+                        document.getElementById(`fileLabel${lotCounter}`).textContent = `✅ ${file.name}`;
+                        document.getElementById(`fileLabel${lotCounter}`).classList.add('has-file');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            auctionConfig.numberOfLots = lotCounter;
+            showStatus(`Lot ${lotCounter} added successfully!`, 'success');
+        }
+
+        // Remove lot
+        function removeLot(lotNumber) {
+            if (lotNumber === 1) {
+                showStatus('Cannot remove Lot 1!', 'error');
+                return;
+            }
+
+            if (confirm(`Are you sure you want to remove Lot ${lotNumber}?`)) {
+                const lotElement = document.querySelector(`#lotContainer .config-section:nth-child(${lotNumber})`);
+                if (lotElement) {
+                    lotElement.remove();
+                    showStatus(`Lot ${lotNumber} removed successfully!`, 'success');
+                }
+            }
+        }
+
+        // Save configuration
+        function saveConfiguration() {
+            // Clear existing lots array
+            auctionConfig.lots = [];
+
+            // Get all lot sections
+            const lotSections = document.querySelectorAll('#lotContainer .config-section');
+
+            lotSections.forEach((section, index) => {
+                const lotNumber = index + 1;
+                const suffix = lotNumber === 1 ? '' : lotNumber;
+
+                // Calculate duration in minutes
+                const durationValue = parseInt(document.getElementById(`duration${suffix}`).value);
+                const durationUnit = document.getElementById(`durationUnit${suffix}`).value;
+                const durationInMinutes = durationUnit === 'hours' ? durationValue * 60 : durationValue;
+
+                // Calculate repeat interval in minutes
+                const repeatValue = parseInt(document.getElementById(`repeatInterval${suffix}`).value) || 0;
+                const repeatUnit = document.getElementById(`repeatUnit${suffix}`).value;
+                const repeatInMinutes = repeatValue > 0 ? (repeatUnit === 'hours' ? repeatValue * 60 : repeatValue) : 0;
+
+                const lotData = {
+                    title: document.getElementById(`lotTitle${suffix}`).value,
+                    description: document.getElementById(`lotDescription${suffix}`).value,
+                    duration: durationInMinutes, // Store in minutes
+                    durationUnit: durationUnit,
+                    durationDisplay: durationValue, // Store original value for display
+                    minimumBid: parseInt(document.getElementById(`minimumBid${suffix}`).value),
+                    bidIncrement: parseInt(document.getElementById(`bidIncrement${suffix}`).value),
+                    buyoutBid: document.getElementById(`buyoutBid${suffix}`).value ? parseInt(document.getElementById(`buyoutBid${suffix}`).value) : null,
+                    imageData: null,
+                    redeemCode: document.getElementById(`redeemCode${suffix}`).value || `FUNTIMES-${Date.now()}-${lotNumber}`,
+                    repeatInterval: repeatInMinutes, // Store in minutes
+                    repeatUnit: repeatUnit,
+                    repeatDisplay: repeatValue // Store original value for display
+                };
+
+                // Get image data if exists
+                const preview = document.getElementById(`imagePreview${suffix}`);
+                const img = preview.querySelector('img');
+                if (img) {
+                    lotData.imageData = img.src;
+                }
+
+                auctionConfig.lots.push(lotData);
+            });
+
+            auctionConfig.numberOfLots = auctionConfig.lots.length;
+
+            // Save to localStorage
+            localStorage.setItem('auctionConfig', JSON.stringify(auctionConfig));
+
+            showStatus('Configuration saved successfully!', 'success');
+        }
+
+        // Preview auction with current settings
+        function previewAuction() {
+            saveConfiguration();
+            window.open('secret.html', '_blank');
+        }
+
+        // Reset configuration to defaults
+        function resetConfiguration() {
+            if (confirm('Are you sure you want to reset all settings to defaults?')) {
+                localStorage.removeItem('auctionConfig');
+                auctionConfig = {
+                    duration: 24,
+                    minimumBid: 10,
+                    bidIncrement: 5,
+                    buyoutBid: null,
+                    numberOfLots: 1,
+                    lots: [
+                        {
+                            title: "Mystery Item",
+                            description: "",
+                            image: null,
+                            imageData: null
+                        }
+                    ]
+                };
+                lotCounter = 1;
+
+                // Remove all lots except the first one
+                const container = document.getElementById('lotContainer');
+                const lots = container.querySelectorAll('.config-section');
+                for (let i = 1; i < lots.length; i++) {
+                    lots[i].remove();
+                }
+
+                updateFormFields();
+                document.getElementById('imagePreview').innerHTML = '<p>No image selected</p>';
+                document.getElementById('fileLabel').textContent = '📁 Click to upload image or drag & drop';
+                document.getElementById('fileLabel').classList.remove('has-file');
+                showStatus('Configuration reset to defaults', 'success');
+            }
+        }
+
+        // Show status message
+        function showStatus(message, type) {
+            const statusEl = document.getElementById('statusMessage');
+            statusEl.textContent = message;
+            statusEl.className = `status-message ${type}`;
+            statusEl.style.display = 'block';
+            
+            setTimeout(() => {
+                statusEl.style.display = 'none';
+            }, 3000);
+        }
+
+        // Load and display auction history
+        function loadAuctionHistory() {
+            const history = JSON.parse(localStorage.getItem('auctionHistory') || '[]');
+            const historyContainer = document.getElementById('auctionHistory');
+
+            if (history.length === 0) {
+                historyContainer.innerHTML = '<p style="color: #888; text-align: center; padding: 20px;">No completed auctions yet</p>';
+                return;
+            }
+
+            let historyHTML = '<div style="max-height: 400px; overflow-y: auto;">';
+            history.forEach((auction, index) => {
+                historyHTML += `
+                    <div style="background: #1a1a1a; border: 1px solid #555; border-radius: 6px; padding: 15px; margin-bottom: 10px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <h4 style="color: #FFD700; margin: 0;">${auction.lotTitle}</h4>
+                            <span style="color: #888; font-size: 0.9rem;">${new Date(auction.completedAt).toLocaleString()}</span>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.9rem;">
+                            <div><strong>Winner:</strong> ${auction.winner}</div>
+                            <div><strong>Final Bid:</strong> ${auction.finalBid} 💎</div>
+                            <div><strong>Redeem Code:</strong> <code style="background: #333; padding: 2px 6px; border-radius: 3px;">${auction.redeemCode}</code></div>
+                            <div><strong>Type:</strong> ${auction.type}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            historyHTML += '</div>';
+
+            historyContainer.innerHTML = historyHTML;
+        }
+
+        // Clear auction history
+        function clearHistory() {
+            if (confirm('Are you sure you want to clear all auction history?')) {
+                localStorage.removeItem('auctionHistory');
+                loadAuctionHistory();
+                showStatus('Auction history cleared', 'success');
+            }
+        }
+
+        // Load and display auction requests
+        function loadAuctionRequests() {
+            const requests = JSON.parse(localStorage.getItem('auctionRequests') || '[]');
+            const container = document.getElementById('auctionRequests');
+
+            if (requests.length === 0) {
+                container.innerHTML = '<p style="color: #888; text-align: center; padding: 20px;">No auction requests yet</p>';
+                return;
+            }
+
+            let requestsHTML = '<div style="max-height: 400px; overflow-y: auto;">';
+            requests.forEach((request, index) => {
+                requestsHTML += `
+                    <div style="background: #1a1a1a; border: 1px solid #555; border-radius: 6px; padding: 15px; margin-bottom: 10px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <h4 style="color: #FFD700; margin: 0;">👤 ${request.username}</h4>
+                            <span style="color: #888; font-size: 0.9rem;">${new Date(request.timestamp).toLocaleString()}</span>
+                        </div>
+                        <p style="margin-bottom: 10px; line-height: 1.4;">${request.message}</p>
+                        <div style="font-size: 0.8rem; color: #888;">
+                            <strong>Source:</strong> ${request.source} | <strong>Type:</strong> ${request.type}
+                        </div>
+                    </div>
+                `;
+            });
+            requestsHTML += '</div>';
+
+            container.innerHTML = requestsHTML;
+        }
+
+        // Clear auction requests
+        function clearAuctionRequests() {
+            if (confirm('Are you sure you want to clear all auction requests?')) {
+                localStorage.removeItem('auctionRequests');
+                loadAuctionRequests();
+                showStatus('Auction requests cleared', 'success');
+            }
+        }
+
+        // Start auctions manually
+        function startAuctions() {
+            // Check if there are configured lots
+            if (!auctionConfig.lots || auctionConfig.lots.length === 0) {
+                showStatus('No auction lots configured! Please add at least one lot before starting auctions.', 'error');
+                return;
+            }
+
+            if (confirm('Are you sure you want to start all configured auctions?')) {
+                // Set auction start flag
+                localStorage.setItem('auctionStarted', 'true');
+                localStorage.setItem('auctionStartTime', new Date().toISOString());
+
+                console.log('Starting auctions with', auctionConfig.lots.length, 'lots');
+
+                showStatus('Auctions started successfully! Visit the auction page to see them live.', 'success');
+            }
+        }
+
+        // Stop all auctions and reset auction house
+        function stopAllAuctions() {
+            const confirmMessage = `⚠️ EMERGENCY AUCTION RESET ⚠️
+
+This will immediately:
+• Stop all active auctions
+• Clear all current bids
+• Remove all auction timers
+• Clear repeat queues
+• Reset auction house to empty state
+
+This action cannot be undone!
+
+Are you absolutely sure you want to proceed?`;
+
+            if (confirm(confirmMessage)) {
+                // Clear all auction-related localStorage
+                localStorage.removeItem('auctionState');
+                localStorage.removeItem('auctionStateUpdate');
+                localStorage.removeItem('auctionStarted');
+                localStorage.removeItem('auctionStartTime');
+                localStorage.removeItem('repeatAuctions');
+
+                // Force clear auction state
+                const emptyState = {
+                    activeLots: [],
+                    timestamp: new Date().getTime(),
+                    tabId: 'admin-reset'
+                };
+                localStorage.setItem('auctionState', JSON.stringify(emptyState));
+                localStorage.setItem('auctionStateUpdate', emptyState.timestamp.toString());
+
+                showStatus('🛑 ALL AUCTIONS STOPPED - Auction house has been reset to empty state', 'success');
+
+                // Show additional confirmation
+                setTimeout(() => {
+                    alert('✅ Auction Reset Complete!\n\nAll auctions have been stopped and the auction house is now empty.\n\nTo start new auctions, configure lots and click "Start Auctions".');
+                }, 500);
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadConfiguration();
+            loadAuctionHistory();
+            loadAuctionRequests();
+            setupFileUpload();
+            console.log('Auction Admin Panel - Initialized');
+
+            // Add loading animation
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 0.5s ease';
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
+</body>
+</html>

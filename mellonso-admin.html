@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MELLONSO Admin Panel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1a1a1a, #111111);
+            padding: 40px 0;
+            text-align: center;
+            border-bottom: 2px solid #d4af37;
+        }
+
+        .header h1 {
+            color: #d4af37;
+            font-size: 2.5rem;
+            font-weight: 100;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .header p {
+            color: #888;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+
+        .back-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            color: #d4af37;
+            text-decoration: none;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            z-index: 1000;
+        }
+
+        .back-link:hover {
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .admin-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .admin-section {
+            background: linear-gradient(135deg, #1a1a1a, #111111);
+            border: 2px solid #d4af37;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.1);
+        }
+
+        .section-title {
+            color: #d4af37;
+            font-size: 1.8rem;
+            font-weight: 300;
+            margin-bottom: 25px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #d4af37;
+            margin-bottom: 8px;
+            font-weight: 300;
+            font-size: 1rem;
+            letter-spacing: 1px;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            background: rgba(26, 26, 26, 0.8);
+            border: 2px solid #333;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 1rem;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #d4af37;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-upload input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-upload-label {
+            display: block;
+            padding: 15px;
+            background: rgba(26, 26, 26, 0.8);
+            border: 2px dashed #333;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #888;
+        }
+
+        .file-upload-label:hover {
+            border-color: #d4af37;
+            background: rgba(212, 175, 55, 0.1);
+            color: #d4af37;
+        }
+
+        .file-upload-label.has-file {
+            border-color: #d4af37;
+            color: #d4af37;
+        }
+
+        .image-preview {
+            margin-top: 15px;
+            text-align: center;
+            min-height: 120px;
+            background: rgba(26, 26, 26, 0.5);
+            border: 1px solid #333;
+            border-radius: 5px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-preview img {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 5px;
+        }
+
+        .image-preview p {
+            color: #888;
+            font-style: italic;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #d4af37, #ffd700);
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+
+        .btn:hover {
+            background: linear-gradient(45deg, #ffd700, #d4af37);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45deg, #666, #888);
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(45deg, #888, #666);
+        }
+
+        .btn-danger {
+            background: linear-gradient(45deg, #cc0000, #ff4444);
+            color: #fff;
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(45deg, #ff4444, #cc0000);
+        }
+
+        .action-buttons {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .status-message {
+            background: rgba(212, 175, 55, 0.1);
+            border: 2px solid #d4af37;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: center;
+            color: #d4af37;
+            display: none;
+        }
+
+        .status-message.error {
+            background: rgba(255, 68, 68, 0.1);
+            border-color: #ff4444;
+            color: #ff4444;
+        }
+
+        .counter-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .counter-controls input {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .counter-controls select {
+            padding: 15px;
+            background: rgba(26, 26, 26, 0.8);
+            border: 2px solid #333;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .counter-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-link">← Back to MELLONSO</a>
+    
+    <div class="header">
+        <h1>MELLONSO Admin Panel</h1>
+        <p>Luxury Farm Management • Content Control • Brand Excellence</p>
+    </div>
+
+    <div class="container">
+        <div class="admin-grid">
+            <!-- Stats Management -->
+            <div class="admin-section">
+                <h3 class="section-title">📊 Statistics Management</h3>
+                
+                <div class="form-group">
+                    <label for="heritageYears">Years Perfecting Farms:</label>
+                    <input type="number" id="heritageYears" min="0" value="0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="masterCraftsmen">Master Farm Architect:</label>
+                    <input type="number" id="masterCraftsmen" min="0" value="1">
+                </div>
+                
+                <div class="form-group">
+                    <label for="exclusivePieces">Signature Farm Designs:</label>
+                    <input type="number" id="exclusivePieces" min="0" value="3">
+                </div>
+                
+                <div class="form-group">
+                    <label for="globalPresence">Premium Server:</label>
+                    <input type="number" id="globalPresence" min="0" value="1">
+                </div>
+                
+                <div class="form-group">
+                    <label for="satisfiedCustomers">Satisfied Farm Owners:</label>
+                    <input type="number" id="satisfiedCustomers" min="0" value="0">
+                </div>
+            </div>
+
+            <!-- Stats Background Images -->
+            <div class="admin-section">
+                <h3 class="section-title">🖼️ Stats Background Images</h3>
+
+                <div class="form-group">
+                    <label for="heritageImage">Years Perfecting Farms - Background:</label>
+                    <div class="file-upload">
+                        <input type="file" id="heritageImage" accept="image/*">
+                        <label for="heritageImage" class="file-upload-label" id="heritageImageLabel">
+                            📁 Click to upload background image
+                        </label>
+                    </div>
+                    <div class="image-preview" id="heritageImagePreview">
+                        <p>No image selected</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="architectImage">Master Farm Architect - Background:</label>
+                    <div class="file-upload">
+                        <input type="file" id="architectImage" accept="image/*">
+                        <label for="architectImage" class="file-upload-label" id="architectImageLabel">
+                            📁 Click to upload background image
+                        </label>
+                    </div>
+                    <div class="image-preview" id="architectImagePreview">
+                        <p>No image selected</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="designsImage">Signature Farm Designs - Background:</label>
+                    <div class="file-upload">
+                        <input type="file" id="designsImage" accept="image/*">
+                        <label for="designsImage" class="file-upload-label" id="designsImageLabel">
+                            📁 Click to upload background image
+                        </label>
+                    </div>
+                    <div class="image-preview" id="designsImagePreview">
+                        <p>No image selected</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="serverImage">Premium Server - Background:</label>
+                    <div class="file-upload">
+                        <input type="file" id="serverImage" accept="image/*">
+                        <label for="serverImage" class="file-upload-label" id="serverImageLabel">
+                            📁 Click to upload background image
+                        </label>
+                    </div>
+                    <div class="image-preview" id="serverImagePreview">
+                        <p>No image selected</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="satisfiedImage">Satisfied Farm Owners - Background:</label>
+                    <div class="file-upload">
+                        <input type="file" id="satisfiedImage" accept="image/*">
+                        <label for="satisfiedImage" class="file-upload-label" id="satisfiedImageLabel">
+                            📁 Click to upload background image
+                        </label>
+                    </div>
+                    <div class="image-preview" id="satisfiedImagePreview">
+                        <p>No image selected</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Particle Effects -->
+            <div class="admin-section">
+                <h3 class="section-title">✨ Particle Effects</h3>
+
+                <div class="form-group">
+                    <label for="particleImage">Floating Particle Image:</label>
+                    <div class="file-upload">
+                        <input type="file" id="particleImage" accept="image/*">
+                        <label for="particleImage" class="file-upload-label" id="particleImageLabel">
+                            📁 Click to upload particle image
+                        </label>
+                    </div>
+                    <div class="image-preview" id="particleImagePreview">
+                        <p>No image selected</p>
+                    </div>
+                    <small style="color: #888; font-size: 0.8rem; display: block; margin-top: 5px;">
+                        Image will be automatically scaled to 24x24 pixels for particle effects. Best results with square images.
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <button type="button" class="btn btn-reset" onclick="resetParticleImage()" style="width: 100%;">
+                        🔄 Reset to Default Melon Particles
+                    </button>
+                </div>
+            </div>
+
+            <!-- Text Color Configuration -->
+            <div class="admin-section">
+                <h3 class="section-title">🎨 Text Color Configuration</h3>
+
+                <div class="form-group">
+                    <label for="primaryTextColor">Primary Text Color:</label>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <input type="color" id="primaryTextColor" value="#ffffff" style="width: 60px; height: 40px; border: 2px solid #555; border-radius: 6px; background: #1a1a1a;">
+                        <input type="text" id="primaryTextColorHex" value="#ffffff" placeholder="#ffffff" style="flex: 1;" onchange="updateColorFromHex('primaryTextColor', this.value)">
+                    </div>
+                    <small style="color: #888; font-size: 0.8rem; display: block; margin-top: 5px;">
+                        Main text color for headings and important content
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="secondaryTextColor">Secondary Text Color:</label>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <input type="color" id="secondaryTextColor" value="#cccccc" style="width: 60px; height: 40px; border: 2px solid #555; border-radius: 6px; background: #1a1a1a;">
+                        <input type="text" id="secondaryTextColorHex" value="#cccccc" placeholder="#cccccc" style="flex: 1;" onchange="updateColorFromHex('secondaryTextColor', this.value)">
+                    </div>
+                    <small style="color: #888; font-size: 0.8rem; display: block; margin-top: 5px;">
+                        Secondary text color for descriptions and body text
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="accentTextColor">Accent Text Color:</label>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <input type="color" id="accentTextColor" value="#d4af37" style="width: 60px; height: 40px; border: 2px solid #555; border-radius: 6px; background: #1a1a1a;">
+                        <input type="text" id="accentTextColorHex" value="#d4af37" placeholder="#d4af37" style="flex: 1;" onchange="updateColorFromHex('accentTextColor', this.value)">
+                    </div>
+                    <small style="color: #888; font-size: 0.8rem; display: block; margin-top: 5px;">
+                        Accent color for highlights, buttons, and special elements
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <button type="button" class="btn btn-reset" onclick="resetTextColors()" style="width: 100%;">
+                        🔄 Reset to Default Colors
+                    </button>
+                </div>
+            </div>
+
+            <!-- Comprehensive Text Editing -->
+            <div class="admin-section">
+                <h3 class="section-title">📝 Text Content Management</h3>
+                <p style="color: #888; margin-bottom: 20px;">Edit all text content across the MELLONSO website. Each field includes color customization.</p>
+
+                <!-- Hero Section -->
+                <div class="text-section">
+                    <h4 style="color: #d4af37; margin-bottom: 15px;">🏠 Hero Section</h4>
+
+                    <div class="form-group">
+                        <label for="heroTitle">Main Title:</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="heroTitle" value="MELLONSO" style="flex: 1;">
+                            <input type="color" id="heroTitleColor" value="#d4af37" style="width: 60px;">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="heroSubtitle">Subtitle:</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="heroSubtitle" value="Luxury Melon Farm Designs" style="flex: 1;">
+                            <input type="color" id="heroSubtitleColor" value="#ffffff" style="width: 60px;">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="heroDescription">Description:</label>
+                        <div style="display: flex; gap: 10px;">
+                            <textarea id="heroDescription" style="flex: 1;">Where agricultural excellence meets unparalleled luxury. Experience the finest in Minecraft melon cultivation through our exclusive, handcrafted farm designs.</textarea>
+                            <input type="color" id="heroDescriptionColor" value="#cccccc" style="width: 60px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Melon Counter Management -->
+            <div class="admin-section">
+                <h3 class="section-title">🍈 Melon Counter Management</h3>
+                
+                <div class="form-group">
+                    <label>Current Melons Harvested: <span id="currentMelonCount">0</span></label>
+                    <div class="counter-controls">
+                        <button class="btn btn-danger" onclick="resetMelonCounter()">Reset Counter</button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="melonMaxType">Counter Reset Behavior:</label>
+                    <div class="counter-controls">
+                        <select id="melonMaxType" onchange="toggleMelonMax()">
+                            <option value="none">No automatic reset</option>
+                            <option value="max">Reset at maximum value</option>
+                        </select>
+                        <input type="number" id="melonMaxValue" min="1" placeholder="Maximum value" style="display: none;">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="farmsBuilt">Farms Built (Static):</label>
+                    <input type="number" id="farmsBuilt" min="0" value="0">
+                </div>
+            </div>
+
+            <!-- Masterpieces Configuration -->
+            <div class="admin-section">
+                <h3 class="section-title">🎨 Masterpieces Section</h3>
+
+                <div class="form-group">
+                    <label for="cultivationTitle">Premium Melon Cultivation - Title:</label>
+                    <input type="text" id="cultivationTitle" value="Premium Melon Cultivation">
+                </div>
+
+                <div class="form-group">
+                    <label for="cultivationDescription">Premium Melon Cultivation - Description:</label>
+                    <textarea id="cultivationDescription">Artisanal melon farming techniques perfected through generations of agricultural mastery. Each slice represents the pinnacle of Minecraft horticultural excellence.</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="cultivationImage">Premium Melon Cultivation - Background Image:</label>
+                    <div class="file-upload">
+                        <input type="file" id="cultivationImage" accept="image/*">
+                        <label for="cultivationImage" class="file-upload-label" id="cultivationImageLabel">
+                            📁 Click to upload background image
+                        </label>
+                    </div>
+                    <div class="image-preview" id="cultivationImagePreview">
+                        <p>No image selected</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="engineeringTitle">Precision Farm Engineering - Title:</label>
+                    <input type="text" id="engineeringTitle" value="Precision Farm Engineering">
+                </div>
+
+                <div class="form-group">
+                    <label for="engineeringDescription">Precision Farm Engineering - Description:</label>
+                    <textarea id="engineeringDescription">Revolutionary redstone automation systems that transform humble seeds into golden harvests. Where cutting-edge technology meets timeless farming tradition.</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="engineeringImage">Precision Farm Engineering - Background Image:</label>
+                    <div class="file-upload">
+                        <input type="file" id="engineeringImage" accept="image/*">
+                        <label for="engineeringImage" class="file-upload-label" id="engineeringImageLabel">
+                            📁 Click to upload background image
+                        </label>
+                    </div>
+                    <div class="image-preview" id="engineeringImagePreview">
+                        <p>No image selected</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="masteryTitle">Architectural Farm Mastery - Title:</label>
+                    <input type="text" id="masteryTitle" value="Architectural Farm Mastery">
+                </div>
+
+                <div class="form-group">
+                    <label for="masteryDescription">Architectural Farm Mastery - Description:</label>
+                    <textarea id="masteryDescription">Underground sanctuaries of agricultural perfection. Each farm design is a testament to the marriage of functionality and breathtaking aesthetic beauty.</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="masteryImage">Architectural Farm Mastery - Background Image:</label>
+                    <div class="file-upload">
+                        <input type="file" id="masteryImage" accept="image/*">
+                        <label for="masteryImage" class="file-upload-label" id="masteryImageLabel">
+                            📁 Click to upload background image
+                        </label>
+                    </div>
+                    <div class="image-preview" id="masteryImagePreview">
+                        <p>No image selected</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Farms Page Configuration -->
+            <div class="admin-section">
+                <h3 class="section-title">🏗️ Farms Page Configuration</h3>
+
+                <div class="action-buttons" style="margin-bottom: 30px;">
+                    <button class="btn" onclick="addNewFarm()" style="background: linear-gradient(45deg, #32CD32, #228B22); color: #fff;">➕ Add New Farm</button>
+                </div>
+
+                <div id="farmsContainer">
+
+                </div>
+            </div>
+
+            <!-- Contact Requests -->
+            <div class="admin-section">
+                <h3 class="section-title">📞 Contact Requests</h3>
+                <div id="contactRequests">
+                    <p style="color: #888; text-align: center; padding: 20px;">No contact requests yet</p>
+                </div>
+                <button class="btn btn-danger" onclick="clearContactRequests()" style="margin-top: 15px; width: 100%;">🗑️ Clear All Requests</button>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn" onclick="saveConfiguration()">💾 Save All Settings</button>
+            <button class="btn btn-secondary" onclick="previewSite()">👁️ Preview Site</button>
+            <button class="btn btn-danger" onclick="resetToDefaults()">🔄 Reset to Defaults</button>
+        </div>
+
+        <div class="status-message" id="statusMessage"></div>
+    </div>
+
+    <script>
+        // Configuration object
+        let mellonsoConfig = {
+            stats: {
+                heritageYears: 0,
+                masterCraftsmen: 1,
+                exclusivePieces: 3,
+                globalPresence: 1,
+                satisfiedCustomers: 0,
+                farmsBuilt: 0
+            },
+            statsBackgrounds: {
+                heritage: null,
+                architect: null,
+                designs: null,
+                server: null,
+                satisfied: null
+            },
+            particleImage: null,
+            textColors: {
+                primary: '#ffffff',
+                secondary: '#cccccc',
+                accent: '#d4af37'
+            },
+            melonCounter: {
+                current: 0,
+                maxType: 'none',
+                maxValue: null
+            },
+            masterpieces: {
+                cultivation: {
+                    title: "Premium Melon Cultivation",
+                    description: "Artisanal melon farming techniques perfected through generations of agricultural mastery. Each slice represents the pinnacle of Minecraft horticultural excellence.",
+                    backgroundImage: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Cdefs%3E%3ClinearGradient id='melonGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23FF6B47;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23FFD700;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='%23000'/%3E%3Cg transform='translate(50,50)'%3E%3Crect x='0' y='0' width='80' height='80' fill='url(%23melonGrad)' stroke='%232D5016' stroke-width='4'/%3E%3Crect x='100' y='0' width='80' height='80' fill='url(%23melonGrad)' stroke='%232D5016' stroke-width='4'/%3E%3Crect x='200' y='0' width='80' height='80' fill='url(%23melonGrad)' stroke='%232D5016' stroke-width='4'/%3E%3Crect x='0' y='100' width='80' height='80' fill='url(%23melonGrad)' stroke='%232D5016' stroke-width='4'/%3E%3Crect x='100' y='100' width='80' height='80' fill='url(%23melonGrad)' stroke='%232D5016' stroke-width='4'/%3E%3Crect x='200' y='100' width='80' height='80' fill='url(%23melonGrad)' stroke='%232D5016' stroke-width='4'/%3E%3C/g%3E%3C/svg%3E"
+                },
+                engineering: {
+                    title: "Precision Farm Engineering",
+                    description: "Revolutionary redstone automation systems that transform humble seeds into golden harvests. Where cutting-edge technology meets timeless farming tradition.",
+                    backgroundImage: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23000'/%3E%3Cg transform='translate(20,20)'%3E%3Crect x='0' y='0' width='20' height='20' fill='%23FF0000'/%3E%3Crect x='40' y='0' width='20' height='20' fill='%23FF0000'/%3E%3Crect x='80' y='0' width='20' height='20' fill='%23FF0000'/%3E%3Crect x='120' y='0' width='20' height='20' fill='%23FF0000'/%3E%3Crect x='160' y='0' width='20' height='20' fill='%23FF0000'/%3E%3Crect x='200' y='0' width='20' height='20' fill='%23FF0000'/%3E%3Crect x='240' y='0' width='20' height='20' fill='%23FF0000'/%3E%3Crect x='280' y='0' width='20' height='20' fill='%23FF0000'/%3E%3Crect x='320' y='0' width='20' height='20' fill='%23FF0000'/%3E%3Crect x='0' y='40' width='20' height='20' fill='%23888'/%3E%3Crect x='40' y='40' width='20' height='20' fill='%23888'/%3E%3Crect x='80' y='40' width='20' height='20' fill='%23888'/%3E%3Crect x='120' y='40' width='20' height='20' fill='%23888'/%3E%3Crect x='160' y='40' width='20' height='20' fill='%23888'/%3E%3Crect x='200' y='40' width='20' height='20' fill='%23888'/%3E%3Crect x='240' y='40' width='20' height='20' fill='%23888'/%3E%3Crect x='280' y='40' width='20' height='20' fill='%23888'/%3E%3Crect x='320' y='40' width='20' height='20' fill='%23888'/%3E%3C/g%3E%3C/svg%3E"
+                },
+                mastery: {
+                    title: "Architectural Farm Mastery",
+                    description: "Underground sanctuaries of agricultural perfection. Each farm design is a testament to the marriage of functionality and breathtaking aesthetic beauty.",
+                    backgroundImage: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23000'/%3E%3Cg transform='translate(50,50)'%3E%3Crect x='0' y='0' width='300' height='200' fill='%23654321' stroke='%23333' stroke-width='2'/%3E%3Crect x='20' y='20' width='260' height='160' fill='%232F4F2F'/%3E%3Crect x='40' y='40' width='60' height='60' fill='%23228B22'/%3E%3Crect x='120' y='40' width='60' height='60' fill='%23228B22'/%3E%3Crect x='200' y='40' width='60' height='60' fill='%23228B22'/%3E%3Crect x='40' y='120' width='60' height='60' fill='%23228B22'/%3E%3Crect x='120' y='120' width='60' height='60' fill='%23228B22'/%3E%3Crect x='200' y='120' width='60' height='60' fill='%23228B22'/%3E%3C/g%3E%3C/svg%3E"
+                }
+            },
+            farms: [
+                {
+                    id: 1,
+                    title: "Premium Farm Design 1",
+                    description: "Luxury melon cultivation at its finest.",
+                    backgroundImage: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23000'/%3E%3Cg transform='translate(50,50)'%3E%3Crect x='0' y='0' width='300' height='200' fill='%23654321'/%3E%3Crect x='20' y='20' width='80' height='80' fill='%23228B22'/%3E%3Crect x='120' y='20' width='80' height='80' fill='%23FF6B47'/%3E%3Crect x='220' y='20' width='80' height='80' fill='%23228B22'/%3E%3Crect x='20' y='120' width='80' height='80' fill='%23FF6B47'/%3E%3Crect x='120' y='120' width='80' height='80' fill='%23228B22'/%3E%3Crect x='220' y='120' width='80' height='80' fill='%23FF6B47'/%3E%3C/g%3E%3C/svg%3E"
+                },
+                {
+                    id: 2,
+                    title: "Premium Farm Design 2",
+                    description: "Architectural excellence meets agricultural mastery.",
+                    backgroundImage: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23000'/%3E%3Cg transform='translate(30,30)'%3E%3Crect x='0' y='0' width='340' height='240' fill='%23333'/%3E%3Crect x='20' y='20' width='100' height='100' fill='%23654321'/%3E%3Crect x='140' y='20' width='100' height='100' fill='%23654321'/%3E%3Crect x='260' y='20' width='60' height='100' fill='%23654321'/%3E%3Crect x='20' y='140' width='100' height='80' fill='%23654321'/%3E%3Crect x='140' y='140' width='100' height='80' fill='%23654321'/%3E%3Crect x='260' y='140' width='60' height='80' fill='%23654321'/%3E%3C/g%3E%3C/svg%3E"
+                }
+            ]
+        };
+
+        let farmCounter = 2;
+
+        // Load existing configuration
+        function loadConfiguration() {
+            const saved = localStorage.getItem('mellonsoConfig');
+            if (saved) {
+                try {
+                    const savedConfig = JSON.parse(saved);
+                    // Deep merge to preserve structure
+                    mellonsoConfig = {
+                        ...mellonsoConfig,
+                        ...savedConfig,
+                        stats: { ...mellonsoConfig.stats, ...(savedConfig.stats || {}) },
+                        melonCounter: { ...mellonsoConfig.melonCounter, ...(savedConfig.melonCounter || {}) },
+                        masterpieces: { ...mellonsoConfig.masterpieces, ...(savedConfig.masterpieces || {}) },
+                        statsBackgrounds: { ...mellonsoConfig.statsBackgrounds, ...(savedConfig.statsBackgrounds || {}) },
+                        farms: savedConfig.farms || mellonsoConfig.farms
+                    };
+                } catch (e) {
+                    console.error('Error loading config:', e);
+                }
+            }
+            updateFormFields();
+        }
+
+        // Update form fields with loaded data
+        function updateFormFields() {
+            if (mellonsoConfig.stats) {
+                document.getElementById('heritageYears').value = mellonsoConfig.stats.heritageYears || 0;
+                document.getElementById('masterCraftsmen').value = mellonsoConfig.stats.masterCraftsmen || 1;
+                document.getElementById('exclusivePieces').value = mellonsoConfig.stats.exclusivePieces || 3;
+                document.getElementById('globalPresence').value = mellonsoConfig.stats.globalPresence || 1;
+                document.getElementById('satisfiedCustomers').value = mellonsoConfig.stats.satisfiedCustomers || 0;
+                document.getElementById('farmsBuilt').value = mellonsoConfig.stats.farmsBuilt || 0;
+            }
+
+            if (mellonsoConfig.melonCounter) {
+                document.getElementById('currentMelonCount').textContent = (mellonsoConfig.melonCounter.current || 0).toLocaleString();
+                document.getElementById('melonMaxType').value = mellonsoConfig.melonCounter.maxType || 'none';
+                if (mellonsoConfig.melonCounter.maxValue) {
+                    document.getElementById('melonMaxValue').value = mellonsoConfig.melonCounter.maxValue;
+                }
+                toggleMelonMax();
+            }
+
+            // Update masterpieces
+            if (mellonsoConfig.masterpieces) {
+                document.getElementById('cultivationTitle').value = mellonsoConfig.masterpieces.cultivation.title;
+                document.getElementById('cultivationDescription').value = mellonsoConfig.masterpieces.cultivation.description;
+                document.getElementById('engineeringTitle').value = mellonsoConfig.masterpieces.engineering.title;
+                document.getElementById('engineeringDescription').value = mellonsoConfig.masterpieces.engineering.description;
+                document.getElementById('masteryTitle').value = mellonsoConfig.masterpieces.mastery.title;
+                document.getElementById('masteryDescription').value = mellonsoConfig.masterpieces.mastery.description;
+
+                // Show image previews if they exist
+                if (mellonsoConfig.masterpieces.cultivation.backgroundImage) {
+                    showImagePreview('cultivationImagePreview', mellonsoConfig.masterpieces.cultivation.backgroundImage);
+                    document.getElementById('cultivationImageLabel').textContent = '✅ Image loaded';
+                    document.getElementById('cultivationImageLabel').classList.add('has-file');
+                }
+                if (mellonsoConfig.masterpieces.engineering.backgroundImage) {
+                    showImagePreview('engineeringImagePreview', mellonsoConfig.masterpieces.engineering.backgroundImage);
+                    document.getElementById('engineeringImageLabel').textContent = '✅ Image loaded';
+                    document.getElementById('engineeringImageLabel').classList.add('has-file');
+                }
+                if (mellonsoConfig.masterpieces.mastery.backgroundImage) {
+                    showImagePreview('masteryImagePreview', mellonsoConfig.masterpieces.mastery.backgroundImage);
+                    document.getElementById('masteryImageLabel').textContent = '✅ Image loaded';
+                    document.getElementById('masteryImageLabel').classList.add('has-file');
+                }
+            }
+
+            // Update stats backgrounds
+            if (mellonsoConfig.statsBackgrounds) {
+                const statsBackgrounds = [
+                    { key: 'heritage', preview: 'heritageImagePreview', label: 'heritageImageLabel' },
+                    { key: 'architect', preview: 'architectImagePreview', label: 'architectImageLabel' },
+                    { key: 'designs', preview: 'designsImagePreview', label: 'designsImageLabel' },
+                    { key: 'server', preview: 'serverImagePreview', label: 'serverImageLabel' },
+                    { key: 'satisfied', preview: 'satisfiedImagePreview', label: 'satisfiedImageLabel' }
+                ];
+
+                statsBackgrounds.forEach(item => {
+                    if (mellonsoConfig.statsBackgrounds[item.key]) {
+                        showImagePreview(item.preview, mellonsoConfig.statsBackgrounds[item.key]);
+                        document.getElementById(item.label).textContent = '✅ Image loaded';
+                        document.getElementById(item.label).classList.add('has-file');
+                    }
+                });
+            }
+
+            // Update particle image preview
+            if (mellonsoConfig.particleImage) {
+                showImagePreview('particleImagePreview', mellonsoConfig.particleImage);
+                document.getElementById('particleImageLabel').textContent = '✅ Custom particle image loaded';
+                document.getElementById('particleImageLabel').classList.add('has-file');
+            }
+
+            // Update text colors
+            if (mellonsoConfig.textColors) {
+                document.getElementById('primaryTextColor').value = mellonsoConfig.textColors.primary || '#ffffff';
+                document.getElementById('secondaryTextColor').value = mellonsoConfig.textColors.secondary || '#cccccc';
+                document.getElementById('accentTextColor').value = mellonsoConfig.textColors.accent || '#d4af37';
+                document.getElementById('primaryTextColorHex').value = mellonsoConfig.textColors.primary || '#ffffff';
+                document.getElementById('secondaryTextColorHex').value = mellonsoConfig.textColors.secondary || '#cccccc';
+                document.getElementById('accentTextColorHex').value = mellonsoConfig.textColors.accent || '#d4af37';
+            }
+
+            // Render farms configuration
+            renderFarmsConfig();
+
+            loadContactRequests();
+        }
+
+        // Toggle melon max input visibility
+        function toggleMelonMax() {
+            const maxType = document.getElementById('melonMaxType').value;
+            const maxValueInput = document.getElementById('melonMaxValue');
+            maxValueInput.style.display = maxType === 'max' ? 'block' : 'none';
+        }
+
+        // Reset melon counter
+        function resetMelonCounter() {
+            if (confirm('Are you sure you want to reset the melon counter to 0?')) {
+                mellonsoConfig.melonCounter.current = 0;
+                document.getElementById('currentMelonCount').textContent = '0';
+                showStatus('Melon counter reset to 0', 'success');
+            }
+        }
+
+        // Show image preview
+        function showImagePreview(previewId, imageData) {
+            const preview = document.getElementById(previewId);
+            preview.innerHTML = `<img src="${imageData}" alt="Preview">`;
+        }
+
+        // Render farms configuration
+        function renderFarmsConfig() {
+            const container = document.getElementById('farmsContainer');
+            if (!container) return;
+
+            container.innerHTML = '';
+
+            // Ensure farms array exists
+            if (!mellonsoConfig.farms || !Array.isArray(mellonsoConfig.farms) || mellonsoConfig.farms.length === 0) {
+                mellonsoConfig.farms = [
+                    {
+                        id: 1,
+                        title: "Premium Farm Design 1",
+                        description: "Luxury melon cultivation at its finest.",
+                        backgroundImage: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23000'/%3E%3Cg transform='translate(50,50)'%3E%3Crect x='0' y='0' width='300' height='200' fill='%23654321'/%3E%3Crect x='20' y='20' width='80' height='80' fill='%23228B22'/%3E%3Crect x='120' y='20' width='80' height='80' fill='%23FF6B47'/%3E%3Crect x='220' y='20' width='80' height='80' fill='%23228B22'/%3E%3Crect x='20' y='120' width='80' height='80' fill='%23FF6B47'/%3E%3Crect x='120' y='120' width='80' height='80' fill='%23228B22'/%3E%3Crect x='220' y='120' width='80' height='80' fill='%23FF6B47'/%3E%3C/g%3E%3C/svg%3E"
+                    },
+                    {
+                        id: 2,
+                        title: "Premium Farm Design 2",
+                        description: "Architectural excellence meets agricultural mastery.",
+                        backgroundImage: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23000'/%3E%3Cg transform='translate(30,30)'%3E%3Crect x='0' y='0' width='340' height='240' fill='%23333'/%3E%3Crect x='20' y='20' width='100' height='100' fill='%23654321'/%3E%3Crect x='140' y='20' width='100' height='100' fill='%23654321'/%3E%3Crect x='260' y='20' width='60' height='100' fill='%23654321'/%3E%3Crect x='20' y='140' width='100' height='80' fill='%23654321'/%3E%3Crect x='140' y='140' width='100' height='80' fill='%23654321'/%3E%3Crect x='260' y='140' width='60' height='80' fill='%23654321'/%3E%3C/g%3E%3C/svg%3E"
+                    }
+                ];
+                farmCounter = 2;
+            }
+
+            // Update farmCounter to highest ID
+            farmCounter = Math.max(...mellonsoConfig.farms.map(f => f.id));
+
+            mellonsoConfig.farms.forEach((farm, index) => {
+                const farmHTML = `
+                    <div class="farm-config" id="farmConfig${farm.id}" style="border: 2px solid #333; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h4 style="color: #d4af37; margin: 0;">🏗️ Farm ${farm.id}</h4>
+                            <button class="btn btn-danger" onclick="removeFarm(${farm.id})" style="padding: 8px 16px; font-size: 0.9rem;">🗑️ Remove</button>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="farmTitle${farm.id}">Farm ${farm.id} - Title:</label>
+                            <input type="text" id="farmTitle${farm.id}" value="${farm.title || ''}" onchange="updateFarmData(${farm.id}, 'title', this.value)">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="farmDescription${farm.id}">Farm ${farm.id} - Description:</label>
+                            <textarea id="farmDescription${farm.id}" onchange="updateFarmData(${farm.id}, 'description', this.value)">${farm.description || ''}</textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="farmImage${farm.id}">Farm ${farm.id} - Background Image:</label>
+                            <div class="file-upload">
+                                <input type="file" id="farmImage${farm.id}" accept="image/*">
+                                <label for="farmImage${farm.id}" class="file-upload-label" id="farmImageLabel${farm.id}">
+                                    📁 Click to upload background image
+                                </label>
+                            </div>
+                            <div class="image-preview" id="farmImagePreview${farm.id}">
+                                <p>No image selected</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += farmHTML;
+            });
+
+            // Setup file uploads and previews
+            setupFarmFileUploads();
+            updateFarmPreviews();
+        }
+
+        // Update farm data in real-time
+        function updateFarmData(farmId, field, value) {
+            const farmIndex = mellonsoConfig.farms.findIndex(f => f.id === farmId);
+            if (farmIndex >= 0) {
+                mellonsoConfig.farms[farmIndex][field] = value;
+            }
+        }
+
+        // Update farm image previews
+        function updateFarmPreviews() {
+            mellonsoConfig.farms.forEach(farm => {
+                if (farm.backgroundImage) {
+                    const previewEl = document.getElementById(`farmImagePreview${farm.id}`);
+                    const labelEl = document.getElementById(`farmImageLabel${farm.id}`);
+
+                    if (previewEl && labelEl) {
+                        showImagePreview(`farmImagePreview${farm.id}`, farm.backgroundImage);
+                        labelEl.textContent = '✅ Image loaded';
+                        labelEl.classList.add('has-file');
+                    }
+                }
+            });
+        }
+
+        // Add new farm
+        function addNewFarm() {
+            if (!mellonsoConfig.farms) {
+                mellonsoConfig.farms = [];
+            }
+
+            // Find the highest ID and increment
+            const maxId = mellonsoConfig.farms.length > 0 ? Math.max(...mellonsoConfig.farms.map(f => f.id)) : 0;
+            const newId = maxId + 1;
+
+            const newFarm = {
+                id: newId,
+                title: `Premium Farm Design ${newId}`,
+                description: "Luxury melon cultivation excellence.",
+                backgroundImage: `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23000'/%3E%3Cg transform='translate(50,50)'%3E%3Crect x='0' y='0' width='300' height='200' fill='%23654321'/%3E%3Crect x='50' y='50' width='200' height='100' fill='%23228B22'/%3E%3C/g%3E%3C/svg%3E`
+            };
+
+            mellonsoConfig.farms.push(newFarm);
+            farmCounter = newId;
+
+            // Re-render the farms configuration
+            renderFarmsConfig();
+
+            showStatus(`Farm ${newId} added successfully!`, 'success');
+        }
+
+        // Remove farm
+        function removeFarm(farmId) {
+            if (mellonsoConfig.farms.length <= 1) {
+                showStatus('Cannot remove the last farm! At least one farm must remain.', 'error');
+                return;
+            }
+
+            if (confirm(`Are you sure you want to remove Farm ${farmId}?`)) {
+                mellonsoConfig.farms = mellonsoConfig.farms.filter(farm => farm.id !== farmId);
+                renderFarmsConfig();
+                showStatus(`Farm ${farmId} removed successfully!`, 'success');
+            }
+        }
+
+        // Setup file upload handlers
+        function setupFileUploads() {
+            const fileInputs = [
+                { input: 'cultivationImage', preview: 'cultivationImagePreview', label: 'cultivationImageLabel', config: 'masterpieces.cultivation.backgroundImage' },
+                { input: 'engineeringImage', preview: 'engineeringImagePreview', label: 'engineeringImageLabel', config: 'masterpieces.engineering.backgroundImage' },
+                { input: 'masteryImage', preview: 'masteryImagePreview', label: 'masteryImageLabel', config: 'masterpieces.mastery.backgroundImage' },
+                { input: 'heritageImage', preview: 'heritageImagePreview', label: 'heritageImageLabel', config: 'statsBackgrounds.heritage' },
+                { input: 'architectImage', preview: 'architectImagePreview', label: 'architectImageLabel', config: 'statsBackgrounds.architect' },
+                { input: 'designsImage', preview: 'designsImagePreview', label: 'designsImageLabel', config: 'statsBackgrounds.designs' },
+                { input: 'serverImage', preview: 'serverImagePreview', label: 'serverImageLabel', config: 'statsBackgrounds.server' },
+                { input: 'satisfiedImage', preview: 'satisfiedImagePreview', label: 'satisfiedImageLabel', config: 'statsBackgrounds.satisfied' },
+                { input: 'particleImage', preview: 'particleImagePreview', label: 'particleImageLabel', config: 'particleImage' }
+            ];
+
+            fileInputs.forEach(item => {
+                const element = document.getElementById(item.input);
+                if (element) {
+                    element.addEventListener('change', function(e) {
+                        const file = e.target.files[0];
+                        if (file) {
+                            const reader = new FileReader();
+                            reader.onload = function(e) {
+                                const imageData = e.target.result;
+                                showImagePreview(item.preview, imageData);
+
+                                // Special handling for particle image - scale to 16x16
+                                if (item.input === 'particleImage') {
+                                    scaleImageForParticles(imageData, (scaledImage) => {
+                                        mellonsoConfig.particleImage = scaledImage;
+                                        showImagePreview(item.preview, scaledImage);
+                                        document.getElementById(item.label).textContent = `✅ ${file.name} (scaled to 24x24)`;
+                                        document.getElementById(item.label).classList.add('has-file');
+                                    });
+                                } else {
+                                    // Store in config normally
+                                    const configPath = item.config.split('.');
+                                    if (configPath.length === 3) {
+                                        mellonsoConfig[configPath[0]][configPath[1]][configPath[2]] = imageData;
+                                    } else if (configPath.length === 2) {
+                                        mellonsoConfig[configPath[0]][configPath[1]] = imageData;
+                                    }
+
+                                    document.getElementById(item.label).textContent = `✅ ${file.name}`;
+                                    document.getElementById(item.label).classList.add('has-file');
+                                }
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    });
+                }
+            });
+        }
+
+        // Setup file uploads for farms
+        function setupFarmFileUploads() {
+            if (!mellonsoConfig.farms) return;
+
+            mellonsoConfig.farms.forEach(farm => {
+                const element = document.getElementById(`farmImage${farm.id}`);
+                if (element) {
+                    // Remove existing listeners to prevent duplicates
+                    element.replaceWith(element.cloneNode(true));
+                    const newElement = document.getElementById(`farmImage${farm.id}`);
+
+                    newElement.addEventListener('change', function(e) {
+                        const file = e.target.files[0];
+                        if (file) {
+                            const reader = new FileReader();
+                            reader.onload = function(e) {
+                                const imageData = e.target.result;
+                                showImagePreview(`farmImagePreview${farm.id}`, imageData);
+
+                                // Store in config
+                                const farmIndex = mellonsoConfig.farms.findIndex(f => f.id === farm.id);
+                                if (farmIndex >= 0) {
+                                    mellonsoConfig.farms[farmIndex].backgroundImage = imageData;
+                                }
+
+                                const labelEl = document.getElementById(`farmImageLabel${farm.id}`);
+                                if (labelEl) {
+                                    labelEl.textContent = `✅ ${file.name}`;
+                                    labelEl.classList.add('has-file');
+                                }
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    });
+                }
+            });
+        }
+
+        // Load and display contact requests
+        function loadContactRequests() {
+            const requests = JSON.parse(localStorage.getItem('contactRequests') || '[]');
+            const container = document.getElementById('contactRequests');
+
+            if (requests.length === 0) {
+                container.innerHTML = '<p style="color: #888; text-align: center; padding: 20px;">No contact requests yet</p>';
+                return;
+            }
+
+            let requestsHTML = '<div style="max-height: 400px; overflow-y: auto;">';
+            requests.forEach((request, index) => {
+                requestsHTML += `
+                    <div style="background: rgba(26, 26, 26, 0.8); border: 1px solid #333; border-radius: 6px; padding: 15px; margin-bottom: 10px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <h4 style="color: #d4af37; margin: 0;">👤 ${request.username}</h4>
+                            <span style="color: #888; font-size: 0.9rem;">${new Date(request.timestamp).toLocaleString()}</span>
+                        </div>
+                        <p style="margin-bottom: 10px; line-height: 1.4;">${request.message}</p>
+                        <div style="font-size: 0.8rem; color: #888;">
+                            <strong>Source:</strong> ${request.source}
+                        </div>
+                    </div>
+                `;
+            });
+            requestsHTML += '</div>';
+
+            container.innerHTML = requestsHTML;
+        }
+
+        // Clear contact requests
+        function clearContactRequests() {
+            if (confirm('Are you sure you want to clear all contact requests?')) {
+                localStorage.removeItem('contactRequests');
+                loadContactRequests();
+                showStatus('Contact requests cleared', 'success');
+            }
+        }
+
+        // Save configuration
+        function saveConfiguration() {
+            // Update stats
+            mellonsoConfig.stats.heritageYears = parseInt(document.getElementById('heritageYears').value);
+            mellonsoConfig.stats.masterCraftsmen = parseInt(document.getElementById('masterCraftsmen').value);
+            mellonsoConfig.stats.exclusivePieces = parseInt(document.getElementById('exclusivePieces').value);
+            mellonsoConfig.stats.globalPresence = parseInt(document.getElementById('globalPresence').value);
+            mellonsoConfig.stats.satisfiedCustomers = parseInt(document.getElementById('satisfiedCustomers').value);
+            mellonsoConfig.stats.farmsBuilt = parseInt(document.getElementById('farmsBuilt').value);
+
+            // Update melon counter settings
+            mellonsoConfig.melonCounter.maxType = document.getElementById('melonMaxType').value;
+            mellonsoConfig.melonCounter.maxValue = mellonsoConfig.melonCounter.maxType === 'max' ?
+                parseInt(document.getElementById('melonMaxValue').value) : null;
+
+            // Update masterpieces
+            mellonsoConfig.masterpieces.cultivation.title = document.getElementById('cultivationTitle').value;
+            mellonsoConfig.masterpieces.cultivation.description = document.getElementById('cultivationDescription').value;
+            mellonsoConfig.masterpieces.engineering.title = document.getElementById('engineeringTitle').value;
+            mellonsoConfig.masterpieces.engineering.description = document.getElementById('engineeringDescription').value;
+            mellonsoConfig.masterpieces.mastery.title = document.getElementById('masteryTitle').value;
+            mellonsoConfig.masterpieces.mastery.description = document.getElementById('masteryDescription').value;
+
+            // Update farms - data is already updated in real-time via updateFarmData
+            // Just ensure the data is current
+            if (mellonsoConfig.farms) {
+                mellonsoConfig.farms.forEach(farm => {
+                    const titleEl = document.getElementById(`farmTitle${farm.id}`);
+                    const descEl = document.getElementById(`farmDescription${farm.id}`);
+
+                    if (titleEl) farm.title = titleEl.value;
+                    if (descEl) farm.description = descEl.value;
+                });
+            }
+
+            // Update stats backgrounds
+            if (!mellonsoConfig.statsBackgrounds) {
+                mellonsoConfig.statsBackgrounds = {};
+            }
+
+            // Update text colors
+            updateTextColors();
+
+            // Save to localStorage
+            localStorage.setItem('mellonsoConfig', JSON.stringify(mellonsoConfig));
+
+            showStatus('Configuration saved successfully!', 'success');
+        }
+
+        // Preview site
+        function previewSite() {
+            saveConfiguration();
+            window.open('index.html', '_blank');
+        }
+
+        // Reset to defaults
+        function resetToDefaults() {
+            if (confirm('Are you sure you want to reset all settings to defaults?')) {
+                localStorage.removeItem('mellonsoConfig');
+                mellonsoConfig = {
+                    stats: {
+                        heritageYears: 0,
+                        masterCraftsmen: 1,
+                        exclusivePieces: 3,
+                        globalPresence: 1,
+                        satisfiedCustomers: 0,
+                        farmsBuilt: 0
+                    },
+                    melonCounter: {
+                        current: 0,
+                        maxType: 'none',
+                        maxValue: null
+                    }
+                };
+                updateFormFields();
+                showStatus('Settings reset to defaults', 'success');
+            }
+        }
+
+        // Show status message
+        function showStatus(message, type) {
+            const statusEl = document.getElementById('statusMessage');
+            statusEl.textContent = message;
+            statusEl.className = `status-message ${type}`;
+            statusEl.style.display = 'block';
+            
+            setTimeout(() => {
+                statusEl.style.display = 'none';
+            }, 3000);
+        }
+
+        // Scale image for particles (24x24)
+        function scaleImageForParticles(imageData, callback) {
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+
+                // Set canvas to 24x24
+                canvas.width = 24;
+                canvas.height = 24;
+
+                // Enable image smoothing for better scaling
+                ctx.imageSmoothingEnabled = true;
+                ctx.imageSmoothingQuality = 'high';
+
+                // Draw scaled image
+                ctx.drawImage(img, 0, 0, 24, 24);
+
+                // Convert back to data URL
+                const scaledImageData = canvas.toDataURL('image/png');
+                callback(scaledImageData);
+            };
+            img.src = imageData;
+        }
+
+        // Reset particle image to default
+        function resetParticleImage() {
+            if (confirm('Reset particle effects to default melon slices?')) {
+                mellonsoConfig.particleImage = null;
+
+                // Clear preview
+                document.getElementById('particleImagePreview').innerHTML = '<p>No image selected</p>';
+                document.getElementById('particleImageLabel').textContent = '📁 Click to upload particle image';
+                document.getElementById('particleImageLabel').classList.remove('has-file');
+
+                // Clear file input
+                document.getElementById('particleImage').value = '';
+
+                // Save the configuration to remove the particle image
+                localStorage.setItem('mellonsoConfig', JSON.stringify(mellonsoConfig));
+
+                showStatus('Particle effects reset to default melon slices', 'success');
+            }
+        }
+
+        // Update color from hex input
+        function updateColorFromHex(colorPickerId, hexValue) {
+            if (hexValue.match(/^#[0-9A-F]{6}$/i)) {
+                document.getElementById(colorPickerId).value = hexValue;
+                updateTextColors();
+            }
+        }
+
+        // Update text colors in real-time
+        function updateTextColors() {
+            const primaryColor = document.getElementById('primaryTextColor').value;
+            const secondaryColor = document.getElementById('secondaryTextColor').value;
+            const accentColor = document.getElementById('accentTextColor').value;
+
+            // Update hex inputs
+            document.getElementById('primaryTextColorHex').value = primaryColor;
+            document.getElementById('secondaryTextColorHex').value = secondaryColor;
+            document.getElementById('accentTextColorHex').value = accentColor;
+
+            // Update config
+            mellonsoConfig.textColors = {
+                primary: primaryColor,
+                secondary: secondaryColor,
+                accent: accentColor
+            };
+        }
+
+        // Reset text colors to default
+        function resetTextColors() {
+            if (confirm('Reset text colors to default values?')) {
+                document.getElementById('primaryTextColor').value = '#ffffff';
+                document.getElementById('secondaryTextColor').value = '#cccccc';
+                document.getElementById('accentTextColor').value = '#d4af37';
+                document.getElementById('primaryTextColorHex').value = '#ffffff';
+                document.getElementById('secondaryTextColorHex').value = '#cccccc';
+                document.getElementById('accentTextColorHex').value = '#d4af37';
+
+                mellonsoConfig.textColors = {
+                    primary: '#ffffff',
+                    secondary: '#cccccc',
+                    accent: '#d4af37'
+                };
+
+                showStatus('Text colors reset to defaults', 'success');
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadConfiguration();
+            setupFileUploads();
+            setupColorInputs();
+            console.log('MELLONSO Admin Panel - Initialized');
+
+            // Add loading animation
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 0.5s ease';
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+
+        // Setup color input event listeners
+        function setupColorInputs() {
+            const colorInputs = ['primaryTextColor', 'secondaryTextColor', 'accentTextColor'];
+
+            colorInputs.forEach(inputId => {
+                const colorInput = document.getElementById(inputId);
+                const hexInput = document.getElementById(inputId + 'Hex');
+
+                if (colorInput) {
+                    colorInput.addEventListener('change', updateTextColors);
+                }
+                if (hexInput) {
+                    hexInput.addEventListener('input', function() {
+                        updateColorFromHex(inputId, this.value);
+                    });
+                }
+            });
+        }
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
+</body>
+</html>
